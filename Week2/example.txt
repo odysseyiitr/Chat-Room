@@ -1,0 +1,9 @@
+Here you can write the file text!
+The server will read this file's contents.
+And will return the requested data to the client.
+
+Instructions to run:
+1. Create the server.cpp file
+2. Write a script for the client (say, client.rb)
+3. Run the cpp file in one terminal
+4. In another terminal run the script of client, after adding the appropriate filename in the client script
