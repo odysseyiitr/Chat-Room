@@ -1,37 +1,55 @@
-# Multithreaded-Server
+# ChatRoom
+![logo](https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)
 
-A client-server model which processes the request one by one does not seem good to the user as the time delay for each request to be processed will be large.
-So what can we do… ?
+## Description
+Chatroom is a C++ based project for enabling multiple users to have conversation at a common place.
+## Working Model
 
-Let’s create a Multithread Server.
 
-## GOAL
-Multiple users(clients) may want to access some information from the server. All of them may simultaneously request the resources from the server. For better user experience the server needs to be more responsive that is it should be able to process as many requests as possible.Multithreading is the concept of using multiple threads to execute concurrently. In order to make the server more responsive we would assign the requests to different threads, so that the maximum number of requests can be processed concurrently. Using many threads would lead to a situation where two threads are accessing the same code or the same shared variable and there is a possibility of wrong output. To tackle this situation we use mutex locks to allow only one thread to access the shared code and do the necessary changes and synchronize all the threads. Using too many threads may also slow down. In order to tackle this problem, we would be using a thread pool having a definite number of threads and with the use of mutex we would be assigning each request to a thread. This would speed up the response time and would aim for more user satisfaction.
+https://user-images.githubusercontent.com/76241291/174835579-49ccccb6-0ef6-40b2-8271-782e6add9731.mp4
 
-## Timeline
 
-### Week 1 : `May 25, 2022 - May 31, 2022`
-- Brief Description of the need for threads in programming.
-- Introduction to pthreads.
-- How to pass and receive arguments using pthreads.
-- Use of mutex with threads.
-- Resources: [Thread functions in C/C++ - GeeksforGeeks](https://www.geeksforgeeks.org/thread-functions-in-c-c/), [Mutex lock for Linux Thread Synchronization - GeeksforGeeks](https://www.geeksforgeeks.org/mutex-lock-for-linux-thread-synchronization/)
+## Concepts Used In Project
+- Threads
+    - To handle each client separately by server.
+    - To send and recieve messages  by client.
+- Mutex
+    - To add each client to the client list avoiding the problem of process synchronisation.
+    - To send the messages in order which is ensuring a message is delivered to all users before sending another one.
+- Socket Programming
+    - To create client-server model.
+## Dependencies:
+   - Text Editor
+   - C++ Compiler
+   - WSL/Linux/Mac
+## Installation
+- Clone the repository.
+- Open the repository from the terminal.
+- Type in terminal the command: g++ -pthread -o server_chat server_chat.cpp
+- Type in terminal the command: ./server_chat 3434(This is the port number. You can type any other of your own wish also.)
+- Open another terminal and go to the same directory where project is located.
+- Type in terminal the command:g++ -pthread -o client_chat client_chat.cpp
+- Type in terminal the command: ./client_chat 3434(This number needs to be same as the server one.)
+- Enter your name and you are ready to go.
+- You can connect multiple clients by opening the project from multiple terminal and writing the command ./client_chat 3434.
+## 
 
-### Week 2 : `Jun 1, 2022 - Jun 7, 2022`
-- Understand the working of a simple server.
-- Implement a simple server using the socket library. The server would read a file and display the number of bytes in the file.
-- Understand how the client makes a connection to the server and asks it to perform the job by passing required instructions.
-- Implement the client using a Ruby script and understand the working.
-- Resources: [Socket Programming](https://www.geeksforgeeks.org/socket-programming-cc/)
+## Features
+- Multiple clients can chat at a common place.
+- Every user gets to see who is the sender of each message.
+- No messages are lost and using mutex the order of message delivery is taken care.
+- All the users can see when a new user joins the room or leaves it.
 
-### Week 3 : `Jun 8, 2022 - Jun 14, 2022`
-- Understanding multithreaded servers and their advantages over simple servers.
-- Implementing threads in our servers to make it more efficient
-- Discussing all the problems involved with implementing threads on the server
-- Understanding the various solutions to the issues discussed.
-- Resources: https://www.geeksforgeeks.org/handling-multiple-clients-on-server-with-multithreading-using-socket-programming-in-c-cpp/
+## Working of the Project
+The ChatRoom Project is client-server model where the server is multithreaded, so that it can support multiple clients at same time. Using threads we handle the multiple client that are requesting to join our chat room. The use of mutex is necessary where multiple clients wants to join the room at same time, we need to use mutex in order to add the clients one by one. This helps in avoiding the problem of process synchronisation. The client also uses separate threads for sending and recieving messages as both of the processes may occur concurrently. The client sends the message to the server and then the server forwards it to all the other clients in the chatroom. Mutex are again used here where we ensure that a message is sent to every client before sending another one.
 
-## Additionals
-- Customize your server: (Make it a web server or a tic-tac-toe server or anything else of your choice)
-- Make a Proper Documentation of Project
-- Add necessary comments in the code
+## Learnings from the Project
+- Socket Programming
+- Use of multithreading
+- Use of mutex in server
+## Links
+To understand the concepts used in more detail, you can refer to following links.
+- [Socket Programming](https://www.geeksforgeeks.org/socket-programming-cc/)
+- [Pthreads](https://www.geeksforgeeks.org/thread-functions-in-c-c/)
+- [Multithreading](https://www.geeksforgeeks.org/multithreading-in-cpp/)
+- [Mutex](https://www.geeksforgeeks.org/mutex-lock-for-linux-thread-synchronization/)
