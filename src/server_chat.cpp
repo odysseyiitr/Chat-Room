@@ -13,7 +13,9 @@
 #define MAX_CLIENTS 100
 #define BUFFER_SZ 2048
 #define NAME_LEN 32
-
+/*
+    Name that comes from client end check if it's already in clients and return  a boolean value
+*/
 static  unsigned int cli_count =0;
 static int uid =10;
 
