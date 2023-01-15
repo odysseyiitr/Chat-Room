@@ -30,6 +30,22 @@ client_t *clients[MAX_CLIENTS];
 
 pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+int check_duplicate_client_name()
+{
+    int i=0, j=0;
+    while(clients[i])
+    {
+        while(clients[j])
+        {
+            if(strcmp(clients[i]->name, clients[j]->name) == 0)
+                return 1;
+            ++j;
+        }
+        ++i;
+    }
+    return 0;
+}
+
 void str_overwrite_stdout(){
     printf("\r%s",">");
     fflush(stdout);
