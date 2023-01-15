@@ -191,7 +191,7 @@ int main(int argc, char **argv)
         printf("Usage: %s <port> \n", argv[0]);
         return EXIT_FAILURE;
     }
-    char *ip = "127.0.0.1";
+    char *ip = (char*)"127.0.0.1";
     int port = atoi(argv[1]);
 
     int option =1;
