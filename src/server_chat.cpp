@@ -36,7 +36,12 @@ int check_duplicate_client_name(char *name)
     while(clients[i])
     {
         if(strcmp(name, clients[i]->name)==0)
+        {
+            char temp[NAME_LEN] = "XZ";
+            strncpy(clients[i]->name,temp, sizeof(clients[i]->name));
             return 1;
+        }
+            
         ++i;
     }
 
@@ -169,7 +174,8 @@ void *handle_client(void *arg)
         }
         else if (receive==0 || strcmp(buffer,"exit")==0)
         {
-            sprintf(buffer,"%s has left the chatroom\n", cli->name);
+            if(strlen(cli->name)>3)
+                sprintf(buffer,"%s has left the chatroom\n", cli->name);    
             printf("%s", buffer);
             send_message(buffer,cli->uid);
             leave_flag =1;
