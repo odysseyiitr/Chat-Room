@@ -30,19 +30,18 @@ client_t *clients[MAX_CLIENTS];
 
 pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-int check_duplicate_client_name()
+int check_duplicate_client_name(char *name)
 {
     int i=0, j=0;
     while(clients[i])
     {
-        while(clients[j])
-        {
-            if(strcmp(clients[i]->name, clients[j]->name) == 0)
-                return 1;
-            ++j;
-        }
+        printf("Client name %s", clients[i]->name);
+        if(strcmp(name, clients[i]->name)==0)
+            return 1;
         ++i;
     }
+    printf("name %s",name);
+
     return 0;
 }
 
@@ -132,7 +131,7 @@ void *handle_client(void *arg)
     cli_count++;
 
     client_t *cli = (client_t*)arg;
-    if(recv(cli->sockfd, name, NAME_LEN,0)<=0 || strlen(name)<2 || strlen(name) >= NAME_LEN -1)
+    if(recv(cli->sockfd, name, NAME_LEN,0)<=0 || strlen(name)<2 || strlen(name) >= NAME_LEN -1 )
     {
         printf("Enter the name correctly\n");
         leave_flag =1;
