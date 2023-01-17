@@ -13,7 +13,9 @@
 #define MAX_CLIENTS 100
 #define BUFFER_SZ 2048
 #define NAME_LEN 32
-
+/*
+    Name that comes from client end check if it's already in clients and return  a boolean value
+*/
 static  unsigned int cli_count =0;
 static int uid =10;
 
@@ -27,6 +29,24 @@ typedef struct {
 client_t *clients[MAX_CLIENTS];
 
 pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+int check_duplicate_client_name(char *name)
+{
+    int i=0, j=0;
+    while(clients[i])
+    {
+        if(strcmp(name, clients[i]->name)==0)
+        {
+            char temp[NAME_LEN] = "XZ";
+            strncpy(clients[i]->name,temp, sizeof(clients[i]->name));
+            return 1;
+        }
+            
+        ++i;
+    }
+
+    return 0;
+}
 
 void str_overwrite_stdout(){
     printf("\r%s",">");
@@ -114,13 +134,22 @@ void *handle_client(void *arg)
     cli_count++;
 
     client_t *cli = (client_t*)arg;
-    if(recv(cli->sockfd, name, NAME_LEN,0)<=0 || strlen(name)<2 || strlen(name) >= NAME_LEN -1)
+    if(recv(cli->sockfd, name, NAME_LEN,0)<=0 || strlen(name)<2 || strlen(name) >= NAME_LEN -1 )
     {
         printf("Enter the name correctly\n");
         leave_flag =1;
+        char response[1024] = "1";
+        send(cli->sockfd, response, sizeof(response), 0);
+    }
+    else if(check_duplicate_client_name(name))
+    {
+        char response[1024] = "1";
+        send(cli->sockfd, response, sizeof(response), 0);
     }
     else
     {
+        char response[1024] = "0";
+        send(cli->sockfd, response, sizeof(response), 0);
         strcpy(cli->name, name);
         sprintf(buffer,"%s has joined the chatroom\n",cli->name);
         printf("%s",buffer);
@@ -145,7 +174,8 @@ void *handle_client(void *arg)
         }
         else if (receive==0 || strcmp(buffer,"exit")==0)
         {
-            sprintf(buffer,"%s has left the chatroom\n", cli->name);
+            if(strlen(cli->name)>3)
+                sprintf(buffer,"%s has left the chatroom\n", cli->name);    
             printf("%s", buffer);
             send_message(buffer,cli->uid);
             leave_flag =1;
@@ -173,7 +203,7 @@ int main(int argc, char **argv)
         printf("Usage: %s <port> \n", argv[0]);
         return EXIT_FAILURE;
     }
-    char *ip = "127.0.0.1";
+    char *ip = (char*)"127.0.0.1";
     int port = atoi(argv[1]);
 
     int option =1;
