@@ -35,12 +35,10 @@ int check_duplicate_client_name(char *name)
     int i=0, j=0;
     while(clients[i])
     {
-        printf("Client name %s", clients[i]->name);
         if(strcmp(name, clients[i]->name)==0)
             return 1;
         ++i;
     }
-    printf("name %s",name);
 
     return 0;
 }
@@ -135,9 +133,18 @@ void *handle_client(void *arg)
     {
         printf("Enter the name correctly\n");
         leave_flag =1;
+        char response[1024] = "1";
+        send(cli->sockfd, response, sizeof(response), 0);
+    }
+    else if(check_duplicate_client_name(name))
+    {
+        char response[1024] = "1";
+        send(cli->sockfd, response, sizeof(response), 0);
     }
     else
     {
+        char response[1024] = "0";
+        send(cli->sockfd, response, sizeof(response), 0);
         strcpy(cli->name, name);
         sprintf(buffer,"%s has joined the chatroom\n",cli->name);
         printf("%s",buffer);

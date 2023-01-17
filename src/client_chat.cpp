@@ -18,6 +18,7 @@ volatile sig_atomic_t flag  =0;
 int sockfd =0;
 char name[NAME_LEN];
 
+
 void str_overwrite_stdout(){
     printf("\r%s",">");
     fflush(stdout);
@@ -119,6 +120,14 @@ int main(int argc, char **argv)
     }
 
     send(sockfd,name,NAME_LEN,0);
+    char response[1024];
+    recv(sockfd, response, sizeof(response),0);
+
+    if(response[0] == '1')
+    {
+        printf("Name Already Exists\n");
+        return EXIT_FAILURE;
+    }
 
     printf("           Hi! WELCOME TO THE CHATROOM.            \n");
     pthread_t send_msg_thread;
